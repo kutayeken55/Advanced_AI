@@ -43,6 +43,11 @@ class InvDynamicsNetwork(nn.Module):
     '''
     def __init__(self):
         super().__init__()
+        self.first_layer = nn.Linear(4,256)
+        self.relu = nn.ReLU()
+        self.second_layer = nn.Linear(256,128)
+        self.relu = nn.ReLU()
+        self.third_layer = nn.Linear(128,3)
 
         #This network should take in 4 inputs corresponding to car position and velocity in s and s'
         # and have 3 outputs corresponding to the three different actions
@@ -56,6 +61,11 @@ class InvDynamicsNetwork(nn.Module):
         ###############
         #TODO:
         ###############
+        x = self.first_layer(x)
+        x = self.relu(x)
+        x = self.second_layer(x)
+        x = self.relu(x)
+        x = self.third_layer(x)
         return x
     
 
@@ -64,14 +74,14 @@ class InvDynamicsNetwork(nn.Module):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=None)
     parser.add_argument('--num_demos', default = 1, type=int, help="number of human demonstrations to collect")
-    parser.add_argument('--num_bc_iters', default = 100, type=int, help="number of iterations to run BC")
+    parser.add_argument('--num_bc_iters', default = 5000, type=int, help="number of iterations to run BC")
     parser.add_argument('--num_evals', default=6, type=int, help="number of times to run policy after training for evaluation")
 
     args = parser.parse_args()
 
 
     #collect random interaction data
-    num_interactions = 5
+    num_interactions = 35
     s_s2, acs = collect_random_interaction_data(num_interactions)
     #put the data into tensors for feeding into torch
     s_s2_torch = torch.from_numpy(np.array(s_s2)).float().to(device)
@@ -83,6 +93,14 @@ if __name__ == "__main__":
     ##################
     #TODO: Train the inverse dyanmics model, no need to be fancy you can do it in one full batch via gradient descent if you like
     ##################
+    criterion = nn.CrossEntropyLoss()
+    optimizer = Adam(inv_dyn.parameters(), lr = 0.001)
+    for epoch in range(args.num_bc_iters):
+        optimizer.zero_grad()
+        outputs = inv_dyn(s_s2_torch)
+        loss = criterion(outputs, a_torch)
+        loss.backward()
+        optimizer.step()
 
 
 
