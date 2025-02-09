@@ -5,7 +5,7 @@ import numpy as np
 
 
 #Create homework grid world 
-grid_env = mdp.gen_simple_world()
+grid_env = mdp.gen_simple_world2()
 
 #visualize rewards
 print("rewards")

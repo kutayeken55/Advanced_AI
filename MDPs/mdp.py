@@ -189,3 +189,35 @@ def gen_simple_world():
                 0,  0,  0, 0]
     env = MDP(n_rows, n_cols, terminals, rewards, gamma, noise)
     return env
+
+def gen_simple_world2():
+    #four features, red (-1), blue (+5), white (0), yellow (+1)
+    gamma = 0.95
+    #create state features for a 2x2 grid (really just an array, but I'm formating it to look like the grid world)
+    noise = 0.1 #noise in transitions applied in directions perpendicular to chosen action
+    # e.g., noise = 0.1 means a 10% chance of going left and 10% chance of going right if action is up
+    n_rows = 4
+    n_cols = 4
+    terminals = [0,1,5,15] #top left state is terminal sink state 
+    rewards = [+1, -1,  0, 0,
+                0, -1,  0, 0,
+                0,  0,  0, 0,
+                0,  0,  0, +10]
+    env = MDP(n_rows, n_cols, terminals, rewards, gamma, noise)
+    return env
+
+def gen_simple_world3():
+        #four features, red (-1), blue (+5), white (0), yellow (+1)
+    gamma = 0.95
+    #create state features for a 2x2 grid (really just an array, but I'm formating it to look like the grid world)
+    noise = 0.4 #noise in transitions applied in directions perpendicular to chosen action
+    # e.g., noise = 0.1 means a 10% chance of going left and 10% chance of going right if action is up
+    n_rows = 4
+    n_cols = 4
+    terminals = [0,1,5] #top left state is terminal sink state 
+    rewards = [+1, -1,  0, 0,
+                0, -1,  0, 0,
+                0,  0,  0, 0,
+                0,  0,  0, +1]
+    env = MDP(n_rows, n_cols, terminals, rewards, gamma, noise)
+    return env
