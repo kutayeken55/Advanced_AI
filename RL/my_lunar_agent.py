@@ -182,10 +182,10 @@ for i_episode in range(num_episodes):
         reward = torch.tensor([reward], device=device)
         done = terminated or truncated
 
-        # # Extract state variables from observation
+        # Extract state variables from observation
         lander_x, lander_y, vel_x, vel_y, angle, angle_vel, left_leg, right_leg = observation
 
-        # # ✅ Manually detect a stable landing and end the episode
+        # Manually detect a stable landing and end the episode
         if left_leg > 0.5 and right_leg > 0.5 and abs(vel_x) < 0.1 and abs(vel_y) < 0.1 and abs(angle) < 0.1:
             done = True  # Force episode termination
 
@@ -216,7 +216,6 @@ for i_episode in range(num_episodes):
         target_net.load_state_dict(policy_net.state_dict())
 
 print('Training Completed')
-# torch.save(policy_net.state_dict(), "lunarlander_dqn.pth")
 
 def select_action(state):
     """Selects the best action from the trained DQN model."""
